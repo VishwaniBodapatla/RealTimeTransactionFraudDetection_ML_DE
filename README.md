@@ -6,7 +6,7 @@ This repository contains a complete end-to-end **real-time fraud detection syste
 
 ## 🚀 Architecture Overview
 
-<img src="https://github.com/user-attachments/assets/306e7e0f-2797-4c72-a717-030abecdb539" width="400" />
+<img src="https://github.com/user-attachments/assets/306e7e0f-2797-4c72-a717-030abecdb539" width="800" />
 
 
 ## Project Flow
