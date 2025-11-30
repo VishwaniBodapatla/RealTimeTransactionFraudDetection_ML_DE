@@ -53,12 +53,3 @@ This repository contains a complete end-to-end **real-time fraud detection syste
 - This setup makes the project **reproducible and scalable**.
 
 ---
-
-## How to Run
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/<your-username>/<repo-name>.git
-   cd <repo-name>
-
----
