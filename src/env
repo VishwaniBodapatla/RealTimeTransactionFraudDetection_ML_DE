@@ -1,0 +1,22 @@
+# ---------------------------------------------------------
+# FIXED ENV FILE
+# ---------------------------------------------------------
+
+# Airflow UID/GID
+AIRFLOW_UID=1000
+GID=0
+
+# Required to allow Airflow services to share logs
+AIRFLOW__WEBSERVER__SECRET_KEY=my_super_secret_key_123456
+
+# MinIO
+AWS_ACCESS_KEY_ID=minio
+AWS_SECRET_ACCESS_KEY=minio123
+MINIO_USERNAME=minio
+MINIO_PASSWORD=minio123
+
+# Kafka
+KAFKA_BOOTSTRAP_SERVERS=
+KAFKA_USERNAME=
+KAFKA_PASSWORD=
+
