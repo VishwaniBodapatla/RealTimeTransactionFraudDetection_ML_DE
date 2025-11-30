@@ -6,38 +6,48 @@ This repository contains a complete end-to-end **real-time fraud detection syste
 
 ## 🚀 Architecture Overview
 
-<img width="2124" height="1148" alt="Screenshot From 2025-11-29 18-07-09" src="https://github.com/user-attachments/assets/306e7e0f-2797-4c72-a717-030abecdb539" />
+<img src="https://github.com/user-attachments/assets/306e7e0f-2797-4c72-a717-030abecdb539" width="400" />
 
 
+## Project Flow
 
-The project is divided into several components:
+### 1. Transaction Simulation (Producer)
+- I created a **Python producer** that simulates realistic financial transactions.
+- The producer introduces multiple **fraud patterns** (account takeover, card testing, merchant collusion, geo anomalies).
+- Transactions are validated using a **JSON schema** before sending.
+- All transactions are streamed to **Kafka topic**: `VishwaSimulatedTransactions`.
 
-### 1. **Transaction Producer**
-- Simulates realistic financial transactions with a small percentage flagged as fraudulent.
-- Implements multiple fraud patterns (account takeover, card testing, merchant collusion, geo anomalies).
-- Produces transactions to a **Kafka topic**.
-- Built with Python and `confluent_kafka`.
+### 2. Model Training (Airflow + MLflow)
+- Using **Airflow**, I created a DAG that triggers training whenever needed.
+- The DAG reads all data currently in the first Kafka topic (`VishwaSimulatedTransactions`) for training.
+- The trained model artifacts are stored in **MinIO**, and MLflow tracks all experiments and keeps **versioned models**.
+- MLflow allows us to automatically select the **best-performing model** based on validation metrics.
 
-### 2. **Kafka**
-- Apache Kafka is used as the message broker.
-- Producer sends transaction messages to the topic `VishwaSimulatedTransactions`.
-- Spark reads these messages for inference.
+### 3. Inference Pipeline (Spark Streaming)
+- The inference pipeline reads **real-time transactions** from the first Kafka topic.
+- Features are engineered in Spark (e.g., transaction hour, weekend/night flags, merchant risk, rolling averages).
+- The pipeline loads the **best model** from MinIO/MLflow.
+- Predictions are made using a **PySpark pandas UDF**.
+- Transactions flagged as fraud are sent to a **second Kafka topic**: `predicted`.
 
-### 3. **Inference Pipeline (Spark Streaming)**
-- Reads transactions in real-time from Kafka.
-- Performs feature engineering (e.g., transaction hour, weekend, merchant risk, rolling averages).
-- Loads the best fraud detection model from **MLflow**.
-- Runs inference using a PySpark **pandas UDF**.
-- Writes predicted fraud transactions to the Kafka topic `predicted`.
+### 4. Overall Architecture
+- **Producer** streams transaction data → **Kafka** topic 1.
+- **Airflow DAG** triggers model training using topic 1 data → stores model artifacts in MinIO → logs experiment in MLflow.
+- **Inference pipeline** reads topic 1 → uses best model from MinIO → predicts fraud → sends results to topic 2 (`predicted`).
 
-### 4. **MLflow + MinIO**
-- **MLflow** is used to track experiments, register models, and manage versions.
-- **MinIO** serves as the S3-compatible artifact storage for MLflow.
-- Models are versioned and the best-performing version is loaded for inference.
+### 5. Containerization
+- All components are **dockerized**:
+  - Producer, Spark streaming inference, MLflow, MinIO, Kafka, Redis, PostgreSQL, Airflow.
+- **Docker Compose** orchestrates the full stack with proper environment variables, volumes, and health checks.
+- This setup makes the project **reproducible and scalable**.
 
-### 5. **Airflow**
-- Orchestrates ETL, model training, and inference workflows.
-- CeleryExecutor with Redis as the broker and PostgreSQL as the metadata DB.
-- DAGs can trigger producer or inference tasks automatically.
+---
+
+## How to Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-username>/<repo-name>.git
+   cd <repo-name>
 
 ---
