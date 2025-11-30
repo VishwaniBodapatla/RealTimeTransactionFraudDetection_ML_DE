@@ -6,6 +6,9 @@ This repository contains a complete end-to-end **real-time fraud detection syste
 
 ## 🚀 Architecture Overview
 
+<img width="2124" height="1148" alt="Screenshot From 2025-11-29 18-07-09" src="https://github.com/user-attachments/assets/1370cb15-204c-423b-9657-fb1d3bb75dfd" />
+
+
 The project is divided into several components:
 
 ### 1. **Transaction Producer**
