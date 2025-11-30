@@ -17,11 +17,19 @@ This repository contains a complete end-to-end **real-time fraud detection syste
 - Transactions are validated using a **JSON schema** before sending.
 - All transactions are streamed to **Kafka topic**: `VishwaSimulatedTransactions`.
 
+<img src="https://github.com/user-attachments/assets/33ee0b4d-bf37-40f6-93a9-b6a8414295de" width="400" />
+
+
 ### 2. Model Training (Airflow + MLflow)
 - Using **Airflow**, I created a DAG that triggers training whenever needed.
 - The DAG reads all data currently in the first Kafka topic (`VishwaSimulatedTransactions`) for training.
 - The trained model artifacts are stored in **MinIO**, and MLflow tracks all experiments and keeps **versioned models**.
 - MLflow allows us to automatically select the **best-performing model** based on validation metrics.
+<img src="https://github.com/user-attachments/assets/0c4f13af-a0ee-4b5b-bac7-1af427ba5ae4" width="400" />
+
+<img src="https://github.com/user-attachments/assets/1c5193b1-4dd4-4092-995e-613aa3b058b1" width="400" />
+
+
 
 ### 3. Inference Pipeline (Spark Streaming)
 - The inference pipeline reads **real-time transactions** from the first Kafka topic.
@@ -29,6 +37,9 @@ This repository contains a complete end-to-end **real-time fraud detection syste
 - The pipeline loads the **best model** from MinIO/MLflow.
 - Predictions are made using a **PySpark pandas UDF**.
 - Transactions flagged as fraud are sent to a **second Kafka topic**: `predicted`.
+
+<img src="https://github.com/user-attachments/assets/a10d356d-4188-497d-9445-8f7cb73ae5b4" width="400" />
+
 
 ### 4. Overall Architecture
 - **Producer** streams transaction data → **Kafka** topic 1.
